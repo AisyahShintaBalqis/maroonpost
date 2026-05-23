@@ -15,11 +15,12 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 
+
 class TagResource extends Resource
 {
     protected static ?string $model = Tag::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon ='heroicon-o-tag';
 
     protected static ?string $recordTitleAttribute = 'name';
 
@@ -28,12 +29,18 @@ class TagResource extends Resource
         return $schema
         ->schema([
 
+            
             Forms\Components\TextInput::make('name')
                 ->required()
+                ->live(onBlur: true)
+                ->afterStateUpdated(fn ($state, callable $set) =>
+                    $set('slug', \Illuminate\Support\Str::slug($state))
+                )
                 ->maxLength(255),
 
             Forms\Components\TextInput::make('slug')
                 ->required()
+                ->readOnly()
                 ->maxLength(255),
 
         ]);

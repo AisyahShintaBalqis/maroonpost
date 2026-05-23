@@ -19,7 +19,7 @@ class PostResource extends Resource
 {
     protected static ?string $model = Post::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-newspaper';
 
     protected static ?string $recordTitleAttribute = 'title';
 
@@ -34,12 +34,22 @@ class PostResource extends Resource
                     ->relationship('category', 'name')
                     ->required(),
 
+                Forms\Components\Select::make('tags')
+                    ->relationship('tags', 'name')
+                    ->multiple()
+                    ->preload(),
+
                 Forms\Components\TextInput::make('title')
                     ->required()
+                    ->live(onBlur: true)
+                    ->afterStateUpdated(fn ($state, callable $set) =>
+                        $set('slug', \Illuminate\Support\Str::slug($state))
+                    )
                     ->maxLength(255),
 
                 Forms\Components\TextInput::make('slug')
                     ->required()
+                    ->readOnly()
                     ->maxLength(255),
 
                 Forms\Components\Textarea::make('excerpt')
@@ -47,6 +57,7 @@ class PostResource extends Resource
 
                 Forms\Components\FileUpload::make('thumbnail')
                     ->image()
+                    ->disk('public')
                     ->directory('thumbnails'),
 
                 Forms\Components\Textarea::make('content')
