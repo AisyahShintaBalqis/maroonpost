@@ -1,27 +1,69 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>{{ $category->name }}</title>
-</head>
-<body>
+@extends('layouts.frontend')
+@section('title', 'maroonpost')
 
-    <h1>Kategori: {{ $category->name }}</h1>
+@section('content')
 
-    @foreach($posts as $post)
+<section class="max-w-7xl mx-auto px-6 py-10">
 
-        <div style="margin-bottom: 30px;">
+    <h1 class="text-4xl font-bold text-[#800000] mb-2">
+        {{ $category->name }}
+    </h1>
 
-            <h2>
-                <a href="/post/{{ $post->slug }}">
-                    {{ $post->title }}
-                </a>
-            </h2>
+    <p class="text-gray-600 mb-10">
+        Kumpulan berita dalam kategori {{ $category->name }}
+    </p>
 
-            <p>{{ $post->excerpt }}</p>
+    <div class="grid md:grid-cols-3 gap-8">
 
-        </div>
+        @forelse($posts as $post)
 
-    @endforeach
+            <div class="bg-white rounded-2xl shadow overflow-hidden">
 
-</body>
-</html>
+                <img
+                    src="{{ asset('storage/' . $post->thumbnail) }}"
+                    class="w-full h-52 object-cover"
+                >
+
+                <div class="p-5">
+
+                    <h2 class="text-xl font-bold mb-3">
+
+                        <a href="/post/{{ $post->slug }}">
+                            {{ $post->title }}
+                        </a>
+
+                    </h2>
+
+                    <p class="text-gray-600 text-sm">
+                        {{ $post->excerpt }}
+                    </p>
+
+                </div>
+
+            </div>
+
+        @empty
+
+            <div class="col-span-3">
+
+                <div class="bg-white rounded-2xl shadow p-10 text-center">
+
+                    <h2 class="text-2xl font-bold text-gray-700 mb-3">
+                        Belum ada berita
+                    </h2>
+
+                </div>
+
+            </div>
+
+        @endforelse
+
+    </div>
+
+    <div class="mt-10">
+        {{ $posts->links() }}
+    </div>
+
+</section>
+
+@endsection

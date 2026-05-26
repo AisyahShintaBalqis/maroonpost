@@ -1,200 +1,147 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MaroonPost</title>
+@extends('layouts.frontend')
+@section('title', 'maroonpost')
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
-<body class="bg-gray-100">
+@section('content')
 
-    <!-- Navbar -->
-    <nav class="bg-white shadow">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+<!-- Hero -->
+<section class="max-w-7xl mx-auto px-6 pt-8">
 
-            <h1 class="text-3xl font-bold text-red-700">
-                Maroon Post
-            </h1>
+    @if($posts->count())
 
-            <div class="space-x-6">
-                <a href="/" class="hover:text-red-600">Home</a>
-                <a href="#" class="hover:text-red-600">Berita</a>
-                <a href="#" class="hover:text-red-600">Opini</a>
-            </div>
+        <div class="relative rounded-3xl overflow-hidden shadow-xl">
 
-        </div>
-    </nav>
+            <!-- Thumbnail -->
+            @if($posts[0]->thumbnail)
 
-    <!-- Hero -->
-    <section class="max-w-7xl mx-auto px-6 mt-8">
+                <img
+                    src="{{ asset('storage/' . $posts[0]->thumbnail) }}"
+                    class="w-full h-[520px] object-cover"
+                >
 
-        @if($posts->count())
+            @endif
 
-            <div class="bg-white rounded-xl shadow overflow-hidden">
+            <!-- Overlay -->
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent">
 
-                @if($posts[0]->thumbnail)
-                    <img
-                        src="{{ asset('storage/' . $posts[0]->thumbnail) }}"
-                        class="w-full h-[450px] object-cover"
-                    >
-                @endif
+                <div class="absolute bottom-0 p-10 md:p-14 text-white max-w-4xl">
 
-                <div class="p-8">
+                    <!-- Category -->
+                    <span class="inline-block bg-[#800000] px-4 py-1 rounded-full text-sm font-semibold mb-5">
 
-                    <p class="text-red-600 font-semibold mb-2">
                         {{ $posts[0]->category->name }}
-                    </p>
 
-                    <h2 class="text-4xl font-bold mb-4">
+                    </span>
+
+                    <!-- Title -->
+                    <h1 class="text-4xl md:text-6xl font-bold leading-tight mb-6">
+
                         <a href="/post/{{ $posts[0]->slug }}">
-                            {{ $posts[0]->title }}
-                        </a>
-                    </h2>
 
-                    <p class="text-gray-600 text-lg">
+                            {{ $posts[0]->title }}
+
+                        </a>
+
+                    </h1>
+
+                    <!-- Excerpt -->
+                    <p class="text-lg text-gray-200 leading-relaxed">
+
                         {{ $posts[0]->excerpt }}
+
                     </p>
 
                 </div>
 
             </div>
 
-        @endif
-
-    </section>
-
-    <!-- News Grid -->
-    <section class="max-w-7xl mx-auto px-6 mt-10 mb-10">
-
-        <h2 class="text-2xl font-bold mb-6">
-            Berita Terbaru
-        </h2>
-
-        <div class="grid md:grid-cols-3 gap-8">
-
-            @foreach($posts->skip(1) as $post)
-
-                <div class="bg-white rounded-xl shadow overflow-hidden">
-
-                    @if($post->thumbnail)
-                        <img
-                            src="{{ asset('storage/' . $post->thumbnail) }}"
-                            class="w-full h-52 object-cover"
-                        >
-                    @endif
-
-                    <div class="p-5">
-
-                        <p class="text-sm text-red-600 font-semibold mb-2">
-                            {{ $post->category->name }}
-                        </p>
-
-                        <h3 class="text-xl font-bold mb-3">
-                            <a href="/post/{{ $post->slug }}">
-                                {{ $post->title }}
-                            </a>
-                        </h3>
-
-                        <p class="text-gray-600 text-sm">
-                            {{ Str::limit($post->excerpt, 100) }}
-                        </p>
-
-                    </div>
-
-                </div>
-
-            @endforeach
-
         </div>
 
-    </section>
+    @endif
 
-<!-- Footer -->
-<footer class="bg-white border-t mt-16">
+</section>
 
-    <div class="max-w-7xl mx-auto px-6 py-10">
+<!-- Latest News -->
+<section class="max-w-7xl mx-auto px-6 pt-16 pb-20">
 
-        <div class="grid md:grid-cols-3 gap-10">
+    <!-- Section Title -->
+    <div class="flex items-center justify-between mb-10">
 
-            <!-- Brand -->
-            <div>
+        <div>
 
-                <h2 class="text-2xl font-bold text-[#800000] mb-4">
-                    Maroon Post
-                </h2>
+            <h2 class="text-3xl font-bold text-gray-900">
+                Berita Terbaru
+            </h2>
 
-                <p class="text-gray-600 leading-relaxed">
-                    Portal berita Pers kader IMM Sulbar menyajikan informasi,
-                    opini, dan literasi mahasiswa secara kritis dan aktual.
-                </p>
-
-            </div>
-
-            <!-- Navigation -->
-            <div>
-
-                <h3 class="font-bold text-lg mb-4">
-                    Navigasi
-                </h3>
-
-                <ul class="space-y-2 text-gray-600">
-
-                    <li>
-                        <a href="/" class="hover:text-[#800000]">
-                            Home
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="#" class="hover:text-[#800000]">
-                            Berita
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="#" class="hover:text-[#800000]">
-                            Opini
-                        </a>
-                    </li>
-
-                </ul>
-
-            </div>
-
-            <!-- Contact -->
-            <div>
-
-                <h3 class="font-bold text-lg mb-4">
-                    Kontak
-                </h3>
-
-                <p class="text-gray-600">
-                    MaroonPost-Media IMM Sulbar
-                </p>
-
-                <p class="text-gray-600">
-                    Sulawesi Barat
-                </p>
-
-                <p class="text-gray-600 mt-2">
-                    maroonpost@gmail.com
-                </p>
-
-            </div>
-
-        </div>
-
-        <!-- Bottom -->
-        <div class="border-t mt-10 pt-6 text-center text-sm text-gray-500">
-
-            © 2026 MaroonPost — Media IMM Sulbar "Bergerak, Berdaya, Berdampak"
+            <p class="text-gray-500 mt-2">
+                Informasi terbaru dan aktual dari MaroonPost
+            </p>
 
         </div>
 
     </div>
 
-</footer>
+    <!-- Grid -->
+    <div class="grid md:grid-cols-3 gap-8">
 
-</body>
-</html>
+        @foreach($posts->skip(1) as $post)
+
+            <article class="bg-white rounded-2xl shadow hover:shadow-xl transition duration-300 overflow-hidden">
+
+                <!-- Thumbnail -->
+                <div class="overflow-hidden">
+
+                    <img
+                        src="{{ asset('storage/' . $post->thumbnail) }}"
+                        class="w-full h-56 object-cover hover:scale-105 transition duration-500"
+                    >
+
+                </div>
+
+                <!-- Content -->
+                <div class="p-6">
+
+                    <!-- Category -->
+                    <span class="text-sm text-[#800000] font-semibold">
+
+                        {{ $post->category->name }}
+
+                    </span>
+
+                    <!-- Title -->
+                    <h2 class="text-xl font-bold mt-3 mb-4 leading-snug">
+
+                        <a
+                            href="/post/{{ $post->slug }}"
+                            class="hover:text-[#800000] transition"
+                        >
+                            {{ $post->title }}
+                        </a>
+
+                    </h2>
+
+                    <!-- Excerpt -->
+                    <p class="text-gray-600 text-sm leading-relaxed">
+
+                        {{ Str::limit($post->excerpt, 120) }}
+
+                    </p>
+
+                    <!-- Button -->
+                    <a
+                        href="/post/{{ $post->slug }}"
+                        class="inline-flex items-center mt-5 text-[#800000] font-semibold hover:gap-3 transition-all"
+                    >
+                        Baca Selengkapnya →
+                    </a>
+
+                </div>
+
+            </article>
+
+        @endforeach
+
+    </div>
+
+</section>
+
+@endsection

@@ -17,7 +17,7 @@
             font-weight: 600;
             letter-spacing: 0.5px;
         ">
-            © 2026 MaroonPost — Media IMM Sulbar "Bergerak, Berdaya, Berdampak"
+            © 2026 maroonpost — Write to Resist, Write to Enlighten
         </p>
 
     </div>

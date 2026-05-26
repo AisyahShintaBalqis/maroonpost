@@ -30,7 +30,8 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
-            ->brandName('MaroonPost')
+            ->brandLogo(asset('images/maroon-logo.png'))
+            ->favicon(asset('images/fav-icon.jpeg'))
             ->colors([
                 'primary' => Color::hex('#800000'),
             ])

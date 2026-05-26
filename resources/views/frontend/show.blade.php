@@ -1,155 +1,242 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $post->title }}</title>
+@section('og_title', $post->title)
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
-<body class="bg-gray-100">
+@section('og_description', $post->excerpt)
 
-    <!-- Navbar -->
-    <nav class="bg-white shadow">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+@section('og_image', asset('storage/' . $post->thumbnail))
 
-            <a href="/" class="text-3xl font-bold text-red-700">
-                MaroonPost
-            </a>
+@extends('layouts.frontend')
+@section('title', 'maroonpost')
 
-            <div class="space-x-6">
-                <a href="/" class="hover:text-red-600">Home</a>
+@section('content')
+
+<section class="max-w-7xl mx-auto px-6 pt-8">
+
+    <div class="bg-white rounded-2xl shadow overflow-hidden">
+
+        <img
+            src="{{ asset('storage/' . $post->thumbnail) }}"
+            class="w-full h-96 object-cover"
+        >
+
+        <div class="p-10">
+
+            <span class="text-sm text-[#800000] font-semibold">
+                {{ $post->category->name }}
+            </span>
+
+            <h1 class="text-5xl font-bold leading-tight mt-3 mb-6">
+                {{ $post->title }}
+            </h1>
+
+            <div class="text-gray-500 text-sm mb-8">
+
+                Dipublikasikan:
+                {{ $post->created_at->format('d M Y') }}
+
             </div>
 
-        </div>
-    </nav>
+            <!-- Share Buttons -->
+            <div class="flex items-center gap-4 mt-6 mb-10">
 
-    <!-- Article -->
-    <section class="max-w-5xl mx-auto mt-10 mb-16">
+                <span class="font-semibold text-gray-700">
+                    Bagikan:
+                </span>
 
-        <div class="bg-white rounded-2xl shadow overflow-hidden">
-
-            @if($post->thumbnail)
-                <img
-                    src="{{ asset('storage/' . $post->thumbnail) }}"
-                    class="w-full h-[500px] object-cover"
+                <!-- WhatsApp -->
+                <a
+                    href="https://wa.me/?text={{ urlencode(request()->fullUrl()) }}"
+                    target="_blank"
+                    class="bg-green-100 text-green-700 px-4 py-2 rounded-xl text-sm font-semibold hover:bg-green-200 transition"
                 >
-            @endif
+                    WhatsApp
+                </a>
 
-            <div class="p-10">
+                <!-- Facebook -->
+                <a
+                    href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(request()->fullUrl()) }}"
+                    target="_blank"
+                    class="bg-blue-100 text-blue-700 px-4 py-2 rounded-xl text-sm font-semibold hover:bg-blue-200 transition"
+                >
+                    Facebook
+                </a>
 
-                <!-- Category -->
-                <p class="text-red-600 font-semibold mb-3">
-                    {{ $post->category->name }}
-                </p>
-
-                <!-- Title -->
-                <h1 class="text-5xl font-bold leading-tight mb-6">
-                    {{ $post->title }}
-                </h1>
-
-                <!-- Meta -->
-                <div class="text-gray-500 mb-8">
-                    Dipublikasikan
-                    {{ $post->created_at->format('d F Y') }}
-                </div>
-
-                <!-- Content -->
-                <div class="prose prose-lg max-w-none">
-                    {!! nl2br(e($post->content)) !!}
-                </div>
+                <!-- Twitter/X -->
+                <a
+                    href="https://twitter.com/intent/tweet?url={{ urlencode(request()->fullUrl()) }}"
+                    target="_blank"
+                    class="bg-gray-200 text-gray-700 px-4 py-2 rounded-xl text-sm font-semibold hover:bg-gray-300 transition"
+                >
+                    X / Twitter
+                </a>
 
             </div>
 
-        </div>
+            <div class="prose max-w-none">
 
-    </section>
-
-<!-- Footer -->
-<footer class="bg-white border-t mt-16">
-
-    <div class="max-w-7xl mx-auto px-6 py-10">
-
-        <div class="grid md:grid-cols-3 gap-10">
-
-            <!-- Brand -->
-            <div>
-
-                <h2 class="text-2xl font-bold text-[#800000] mb-4">
-                    MaroonPost
-                </h2>
-
-                <p class="text-gray-600 leading-relaxed">
-                    Portal berita pers kampus yang menyajikan informasi,
-                    opini, dan literasi mahasiswa secara kritis dan aktual.
-                </p>
+                {!! $post->content !!}
 
             </div>
-
-            <!-- Navigation -->
-            <div>
-
-                <h3 class="font-bold text-lg mb-4">
-                    Navigasi
-                </h3>
-
-                <ul class="space-y-2 text-gray-600">
-
-                    <li>
-                        <a href="/" class="hover:text-[#800000]">
-                            Home
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="#" class="hover:text-[#800000]">
-                            Berita
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="#" class="hover:text-[#800000]">
-                            Opini
-                        </a>
-                    </li>
-
-                </ul>
-
-            </div>
-
-            <!-- Contact -->
-            <div>
-
-                <h3 class="font-bold text-lg mb-4">
-                    Kontak
-                </h3>
-
-                <p class="text-gray-600">
-                    MaroonPost-Media IMM Sulbar
-                </p>
-
-                <p class="text-gray-600">
-                    Sulawesi Barat
-                </p>
-
-                <p class="text-gray-600 mt-2">
-                    maroonpost@gmail.com
-                </p>
-
-            </div>
-
-        </div>
-
-        <!-- Bottom -->
-        <div class="border-t mt-10 pt-6 text-center text-sm text-gray-500">
-
-            © 2026 MaroonPost — Media IMM Sulbar "Bergerak, Berdaya, Berdampak"
 
         </div>
 
     </div>
 
-</footer>
+</section>
 
-</body>
-</html>
+
+<!-- Comment Section -->
+<section class="max-w-7xl mx-auto px-6 pt-8">
+
+    <div class="bg-white rounded-3xl shadow p-8 md:p-10">
+
+        <!-- Heading -->
+        <div class="mb-10">
+
+            <h2 class="text-3xl font-bold text-gray-900 mb-3">
+                Diskusi & Komentar
+            </h2>
+
+            <p class="text-gray-500">
+                Berikan pendapatmu terkait berita ini secara bijak dan santun.
+            </p>
+
+        </div>
+
+        <!-- Success Message -->
+        @if(session('success'))
+
+            <div class="bg-green-50 border border-green-200 text-green-700 px-5 py-4 rounded-2xl mb-8">
+
+                {{ session('success') }}
+
+            </div>
+
+        @endif
+
+        <!-- Comment Form -->
+        <form action="/comment" method="POST" class="space-y-6">
+
+            @csrf
+
+            <input
+                type="hidden"
+                name="post_id"
+                value="{{ $post->id }}"
+            >
+
+            <!-- Name -->
+            <div>
+
+                <label class="block text-sm font-semibold text-gray-700 mb-2">
+                    Nama
+                </label>
+
+                <input
+                    type="text"
+                    name="name"
+                    placeholder="Masukkan nama"
+                    class="w-full border border-gray-200 rounded-2xl px-5 py-4 focus:outline-none focus:ring-2 focus:ring-[#800000]"
+                    required
+                >
+
+            </div>
+
+            <!-- Comment -->
+            <div>
+
+                <label class="block text-sm font-semibold text-gray-700 mb-2">
+                    Komentar
+                </label>
+
+                <textarea
+                    name="content"
+                    rows="6"
+                    placeholder="Tulis komentar..."
+                    class="w-full border border-gray-200 rounded-2xl px-5 py-4 focus:outline-none focus:ring-2 focus:ring-[#800000] resize-none"
+                    required
+                ></textarea>
+
+            </div>
+
+            <!-- Button -->
+            <div>
+
+                <button
+                    type="submit"
+                    class="bg-[#800000] hover:bg-[#660000] transition text-white font-semibold px-8 py-4 rounded-2xl"
+                >
+                    Kirim Komentar
+                </button>
+
+            </div>
+
+        </form>
+
+        <!-- Divider -->
+        <div class="border-t my-12"></div>
+
+        <!-- Comment List -->
+        <div class="space-y-8">
+
+            <h3 class="text-2xl font-bold text-gray-900">
+                Komentar Pembaca
+            </h3>
+
+            @forelse($post->comments->where('is_approved', true) as $comment)
+
+                <div class="bg-gray-50 border border-gray-100 rounded-2xl p-6">
+
+                    <!-- Header -->
+                    <div class="flex items-center justify-between mb-4">
+
+                        <div>
+
+                            <h4 class="font-bold text-lg text-gray-900">
+
+                                {{ $comment->name }}
+
+                            </h4>
+
+                            <p class="text-sm text-gray-500 mt-1">
+
+                                {{ $comment->created_at->format('d M Y') }}
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Content -->
+                    <p class="text-gray-700 leading-relaxed">
+
+                        {{ $comment->content }}
+
+                    </p>
+
+                </div>
+
+            @empty
+
+                <div class="bg-gray-50 rounded-2xl p-10 text-center">
+
+                    <h3 class="text-xl font-bold text-gray-700 mb-3">
+                        Belum ada komentar
+                    </h3>
+
+                    <p class="text-gray-500">
+                        Jadilah orang pertama yang memberikan komentar.
+                    </p>
+
+                </div>
+
+            @endforelse
+
+        </div>
+
+    </div>
+
+</section>
+
+
+@endsection

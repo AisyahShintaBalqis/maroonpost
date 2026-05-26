@@ -60,10 +60,29 @@ class PostResource extends Resource
                     ->disk('public')
                     ->directory('thumbnails'),
 
-                Forms\Components\Textarea::make('content')
-                    ->rows(10)
-                    ->required()
-                    ->columnSpanFull(),
+                Forms\Components\RichEditor::make('content')
+                    ->toolbarButtons([
+                        'blockquote',
+                        'bold',
+                        'bulletList',
+                        'codeBlock',
+                        'h2',
+                        'h3',
+                        'italic',
+                        'link',
+                        'orderedList',
+                        'redo',
+                        'strike',
+                        'underline',
+                        'undo',
+                    ])
+                    ->extraAttributes([
+                        'style' => 'min-height: 500px;',
+                    ])
+                    ->fileAttachmentsDisk('public')
+                    ->fileAttachmentsDirectory('uploads')
+                    ->columnSpanFull()
+                    ->required(),
 
                 Forms\Components\Select::make('status')
                     ->options([
