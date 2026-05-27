@@ -1,5 +1,11 @@
 @extends('layouts.frontend')
-@section('title', 'maroonpost')
+
+@section('title', $category->name . ' - maroonpost')
+
+@section(
+    'description',
+    'Berita kategori ' . $category->name . ' di maroonpost.'
+)
 
 @section('content')
 
@@ -60,8 +66,10 @@
 
     </div>
 
-    <div class="mt-10">
-        {{ $posts->links() }}
+    <div class="mt-14">
+
+    {{ $posts->links() }}
+
     </div>
 
 </section>

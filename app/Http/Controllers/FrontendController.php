@@ -10,21 +10,29 @@ class FrontendController extends Controller
 {
      public function index()
     {
-        $posts = Post::with('category')
+            $posts = Post::with('category')
             ->where('status', 'published')
             ->latest()
-            ->get();
+            ->paginate(9);
 
         return view('frontend.home', compact('posts'));
     }
 
     public function show($slug)
     {
-        $post = Post::with('category')
+            $post = Post::with('category')
             ->where('slug', $slug)
             ->firstOrFail();
 
-        return view('frontend.show', compact('post'));
+        $relatedPosts = Post::with('category')
+            ->where('category_id', $post->category_id)
+            ->where('id', '!=', $post->id)
+            ->where('status', 'published')
+            ->latest()
+            ->take(3)
+            ->get();
+
+        return view('frontend.show', compact('post', 'relatedPosts'));
     }
 
     public function category($slug)
@@ -37,5 +45,24 @@ class FrontendController extends Controller
             ->get();
 
         return view('frontend.category', compact('category', 'posts'));
+    }
+
+    public function search(Request $request)
+    {
+        $query = $request->q;
+
+        $posts = Post::with('category')
+            ->where('status', 'published')
+            ->where(function ($builder) use ($query) {
+
+                $builder->where('title', 'like', "%{$query}%")
+                    ->orWhere('excerpt', 'like', "%{$query}%")
+                    ->orWhere('content', 'like', "%{$query}%");
+
+            })
+            ->latest()
+            ->paginate(9);
+
+        return view('frontend.search', compact('posts', 'query'));
     }
 }

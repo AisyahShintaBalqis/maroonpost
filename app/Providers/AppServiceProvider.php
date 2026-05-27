@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use App\Models\Page;
 use App\Models\Category;
 use Illuminate\Support\Facades\View;
+use Illuminate\Pagination\Paginator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -29,6 +30,8 @@ class AppServiceProvider extends ServiceProvider
         View::share('pages', $pages);
 
         View::share('categories', $categories);
+
+        Paginator::useTailwind();
     }
 
 }

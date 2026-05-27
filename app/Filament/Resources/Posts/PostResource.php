@@ -60,6 +60,11 @@ class PostResource extends Resource
                     ->disk('public')
                     ->directory('thumbnails'),
 
+                Forms\Components\TextInput::make('video_url')
+                    ->label('YouTube Video URL')
+                    ->placeholder('https://youtube.com/watch?v=...')
+                    ->maxLength(255),
+
                 Forms\Components\RichEditor::make('content')
                     ->toolbarButtons([
                         'blockquote',

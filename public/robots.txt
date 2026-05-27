@@ -1,2 +1,7 @@
 User-agent: *
-Disallow:
+Allow: /
+
+Sitemap: https://domainkamu.com/sitemap.xml
+
+//ganti domain asli pada saat di hostingm,
+

@@ -1,8 +1,15 @@
 @extends('layouts.frontend')
-@section('title', 'maroonpost')
+
+@section('title', 'maroonpost - Media Online IMM Sulbar')
+
+@section(
+    'description',
+    'Portal berita pers kampus, IMM, Muhammadiyah, dan informasi Sulawesi Barat.'
+)
 
 @section('content')
 
+@if(request()->get('page', 1) == 1)
 <!-- Hero -->
 <section class="max-w-7xl mx-auto px-6 pt-8">
 
@@ -59,6 +66,7 @@
     @endif
 
 </section>
+@endif
 
 <!-- Latest News -->
 <section class="max-w-7xl mx-auto px-6 pt-16 pb-20">
@@ -83,7 +91,12 @@
     <!-- Grid -->
     <div class="grid md:grid-cols-3 gap-8">
 
-        @foreach($posts->skip(1) as $post)
+        @foreach(
+                request()->get('page', 1) == 1
+                    ? $posts->skip(1)
+                    : $posts
+                as $post
+            )
 
             <article class="bg-white rounded-2xl shadow hover:shadow-xl transition duration-300 overflow-hidden">
 
@@ -139,6 +152,13 @@
             </article>
 
         @endforeach
+
+    </div>
+
+<!-- Pagination -->
+    <div class="mt-14">
+
+        {{ $posts->links() }}
 
     </div>
 

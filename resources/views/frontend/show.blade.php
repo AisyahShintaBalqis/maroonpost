@@ -1,11 +1,11 @@
-@section('og_title', $post->title)
-
-@section('og_description', $post->excerpt)
-
-@section('og_image', asset('storage/' . $post->thumbnail))
-
 @extends('layouts.frontend')
-@section('title', 'maroonpost')
+
+@section('title', $post->title)
+
+@section('description', $post->excerpt)
+
+@section('image', asset('storage/' . $post->thumbnail))
+
 
 @section('content')
 
@@ -70,6 +70,43 @@
                 </a>
 
             </div>
+
+            @if($post->video_url)
+
+                @php
+
+                    preg_match(
+                        '/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&]+)/',
+                        $post->video_url,
+                        $matches
+                    );
+
+                    $youtubeId = $matches[1] ?? null;
+
+                @endphp
+
+                @if($youtubeId)
+
+                    <div class="my-10">
+
+                        <div class="aspect-video rounded-2xl overflow-hidden shadow">
+
+                            <iframe
+                                class="w-full h-full"
+                                src="https://www.youtube.com/embed/{{ $youtubeId }}"
+                                title="YouTube video player"
+                                frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen
+                            ></iframe>
+
+                        </div>
+
+                    </div>
+
+                @endif
+
+            @endif
 
             <div class="prose max-w-none">
 
@@ -237,6 +274,78 @@
     </div>
 
 </section>
+
+<!-- Related Posts -->
+@if($relatedPosts->count())
+
+<section class="max-w-7xl mx-auto px-6 py-16">
+
+    <div class="mb-10">
+
+        <h2 class="text-3xl font-bold">
+
+            Berita Terkait
+
+        </h2>
+
+        <p class="text-gray-600 mt-2">
+
+            Artikel lain yang mungkin ingin Anda baca.
+
+        </p>
+
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-8">
+
+        @foreach($relatedPosts as $related)
+
+            <div class="bg-white rounded-2xl shadow overflow-hidden">
+
+                @if($related->thumbnail)
+
+                    <img
+                        src="{{ asset('storage/' . $related->thumbnail) }}"
+                        class="w-full h-52 object-cover"
+                    >
+
+                @endif
+
+                <div class="p-5">
+
+                    <span class="text-sm text-[#800000] font-semibold">
+
+                        {{ $related->category->name }}
+
+                    </span>
+
+                    <h3 class="text-xl font-bold mt-2 mb-3 leading-snug">
+
+                        <a href="/post/{{ $related->slug }}">
+
+                            {{ $related->title }}
+
+                        </a>
+
+                    </h3>
+
+                    <p class="text-gray-600 text-sm">
+
+                        {{ Str::limit($related->excerpt, 100) }}
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        @endforeach
+
+    </div>
+
+</section>
+
+@endif
 
 
 @endsection

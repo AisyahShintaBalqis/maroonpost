@@ -1,5 +1,8 @@
 @extends('layouts.frontend')
-@section('title', 'maroonpost')
+
+@section('title', $page->title . ' - maroonpost')
+
+@section('description', Str::limit(strip_tags($page->content), 150))
 
 @section('content')
 

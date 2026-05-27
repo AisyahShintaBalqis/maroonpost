@@ -18,6 +18,7 @@ class Post extends Model
     'excerpt',
     'content',
     'thumbnail',
+    'video_url',
     'views',
     'status',
     'published_at',
